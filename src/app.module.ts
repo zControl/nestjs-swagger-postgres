@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './modules/auth/auth.module';
+import { HealthModule } from './modules/health/health.module';
 import { User } from './modules/users/entities/user.entity';
 import { UsersModule } from './modules/users/users.module';
 
@@ -20,6 +22,8 @@ import { UsersModule } from './modules/users/users.module';
       entities: [User],
     }),
     UsersModule,
+    AuthModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
