@@ -1,24 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from 'src/database/database.module';
+import { HealthModule } from 'src/health/health.module';
 import { AppController } from './app.controller';
 import { AuthModule } from './modules/auth/auth.module';
-import { User } from './modules/users/entities/user.entity';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'sandbox',
-      retryAttempts: 12,
-      retryDelay: 4000,
-      autoLoadEntities: false,
-      entities: [User],
-    }),
+    ConfigModule.forRoot({ isGlobal: true }),
+    HealthModule,
+    DatabaseModule,
     AuthModule,
     UsersModule,
   ],

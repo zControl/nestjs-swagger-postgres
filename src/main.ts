@@ -12,6 +12,15 @@ async function bootstrap() {
     defaultVersion: '1', // Set default version
   });
 
+  // Enable CORS
+  const corsOptions = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+  };
+  app.enableCors(corsOptions);
+
+  // Set config for swagger
   const config = new DocumentBuilder()
     .setTitle('NestJS API Sandbox')
     .setDescription('This is a sandbox to play with API endpoints')

@@ -12,14 +12,11 @@ export class AppController {
     return 'Hello World';
   }
 
-  @Get('status')
-  @ApiOperation({ summary: 'Get API status information' })
+  @Get('version')
+  @ApiOperation({ summary: 'Get API version information' })
   getStatus() {
     return {
-      status: 'ok',
       version: '1.0.0',
-      random_number: Math.random(),
-      timestamp: new Date().toISOString(),
     };
   }
 }
