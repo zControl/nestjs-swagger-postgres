@@ -7,32 +7,41 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiBody, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { CreateExampleDto } from 'src/modules/example/dto/create-example.dto';
 import { Example } from 'src/modules/example/entities/example.entity';
 import { ExampleService } from './example.service';
 
-@ApiTags('example')
+@ApiTags('Example')
 @Controller('example')
 export class ExampleController {
   constructor(private readonly exampleService: ExampleService) {}
 
   @Post()
-  @ApiProperty()
+  @ApiOperation({
+    summary: 'Create a new example',
+    description:
+      'POSTing to this endpoint will create a new row in the table. The data must conform to the proper type to be inserted correctly.',
+  })
   @ApiBody({
-    type: Example,
-    description: 'Create a new row in the example table.',
+    type: CreateExampleDto,
+    description: 'Create a new example here, description is optional',
     examples: {
-      example1: {
-        summary: 'Example 1',
+      exampleData: {
+        summary: 'Basic example object',
         value: {
-          name: 'Sample Name',
-          description: 'This is a sample description',
+          name: 'example name',
+          description: 'example description',
+          count: 1,
+          price: 1.0,
+          isActive: true,
+          metadata: { key: 'value' },
         },
       },
     },
   })
-  create(@Body() example: Example): Promise<Example> {
-    return this.exampleService.create(example);
+  createExample(@Body() createExampleDto: CreateExampleDto) {
+    return this.exampleService.create(createExampleDto);
   }
 
   @Get()
@@ -44,21 +53,38 @@ export class ExampleController {
   @Get(':id')
   @ApiProperty()
   findOne(@Param('id') id: string): Promise<Example> {
-    return this.exampleService.findOne(+id);
+    return this.exampleService.findOne(id);
   }
 
   @Put(':id')
   @ApiProperty()
+  @ApiBody({
+    type: Example,
+    description: 'Update a row in the example table.',
+    examples: {
+      example1: {
+        summary: 'Put to a row in the example table.',
+        value: {
+          name: 'Sample Name',
+          description: 'Sample description',
+          count: 1,
+          price: '0.00',
+          isActive: true,
+          metadata: { key: 'value' },
+        },
+      },
+    },
+  })
   update(
     @Param('id') id: string,
     @Body() example: Partial<Example>,
   ): Promise<Example> {
-    return this.exampleService.update(+id, example);
+    return this.exampleService.update(id, example);
   }
 
   @Delete(':id')
   @ApiProperty()
   remove(@Param('id') id: string): Promise<void> {
-    return this.exampleService.remove(+id);
+    return this.exampleService.remove(id);
   }
 }

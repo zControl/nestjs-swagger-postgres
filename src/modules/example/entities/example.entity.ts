@@ -8,8 +8,8 @@ import {
 
 @Entity()
 export class Example {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -26,10 +26,7 @@ export class Example {
   @Column('boolean', { default: false })
   isActive: boolean;
 
-  @Column('simple-array', { nullable: true })
-  tags: string[];
-
-  @Column('json', { nullable: true })
+  @Column('json', { nullable: true, default: { key: 'value' } })
   metadata: Record<string, any>;
 
   @CreateDateColumn()

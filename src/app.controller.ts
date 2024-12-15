@@ -8,8 +8,18 @@ export class AppController {
   @ApiOperation({
     summary: 'The root endpoint that returns a hello world message.',
   })
-  getHello(): string {
-    return 'Hello World';
+  getHello() {
+    return {
+      timestamp: new Date().toISOString(),
+      greeting: 'Welcome to the API Sanbox.',
+      message: 'This sandbox API is created with NestJS.',
+      environment: process.env.NOD_ENV || 'development',
+      docsURL: 'v1/swagger',
+      endpoints: {
+        version: 'v1/version',
+        health: 'v1/health',
+      },
+    };
   }
 
   @Get('version')

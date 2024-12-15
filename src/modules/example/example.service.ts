@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateExampleDto } from 'src/modules/example/dto/create-example.dto';
 import { Example } from 'src/modules/example/entities/example.entity';
 import { Repository } from 'typeorm';
 
@@ -10,24 +11,25 @@ export class ExampleService {
     private exampleRepository: Repository<Example>,
   ) {}
 
-  create(example: Example): Promise<Example> {
-    return this.exampleRepository.save(example);
+  async create(createExampleDto: CreateExampleDto): Promise<Example> {
+    const newExample = this.exampleRepository.create(createExampleDto);
+    return this.exampleRepository.save(newExample);
   }
 
   findAll(): Promise<Example[]> {
     return this.exampleRepository.find();
   }
 
-  findOne(id: number): Promise<Example> {
+  findOne(id: string): Promise<Example> {
     return this.exampleRepository.findOneBy({ id });
   }
 
-  async update(id: number, updatedExample: Partial<Example>): Promise<Example> {
+  async update(id: string, updatedExample: Partial<Example>): Promise<Example> {
     await this.exampleRepository.update(id, updatedExample);
     return this.exampleRepository.findOneBy({ id });
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.exampleRepository.delete(id);
   }
 }
