@@ -7,8 +7,15 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiProperty,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateExampleDto } from 'src/modules/example/dto/create-example.dto';
+import { ExampleSummaryDto } from 'src/modules/example/dto/example-summary.dto';
 import { Example } from 'src/modules/example/entities/example.entity';
 import { ExampleService } from './example.service';
 
@@ -18,14 +25,10 @@ export class ExampleController {
   constructor(private readonly exampleService: ExampleService) {}
 
   @Post()
-  @ApiOperation({
-    summary: 'Create a new example',
-    description:
-      'POSTing to this endpoint will create a new row in the table. The data must conform to the proper type to be inserted correctly.',
-  })
+  @ApiOperation({ summary: 'Create a new example' })
   @ApiBody({
     type: CreateExampleDto,
-    description: 'Create a new example here, description is optional',
+    description: 'Payload for creating a new example object.',
     examples: {
       exampleData: {
         summary: 'Basic example object',
@@ -48,6 +51,16 @@ export class ExampleController {
   @ApiProperty()
   findAll(): Promise<Example[]> {
     return this.exampleService.findAll();
+  }
+
+  @Get('summaries')
+  @ApiOperation({ summary: 'Get summaries of example data' })
+  @ApiResponse({
+    status: 200,
+    type: [ExampleSummaryDto],
+  })
+  async getSummaries(): Promise<ExampleSummaryDto[]> {
+    return this.exampleService.findAllSummaries();
   }
 
   @Get(':id')

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateExampleDto } from 'src/modules/example/dto/create-example.dto';
+import { ExampleSummaryDto } from 'src/modules/example/dto/example-summary.dto';
 import { Example } from 'src/modules/example/entities/example.entity';
 import { Repository } from 'typeorm';
 
@@ -31,5 +32,11 @@ export class ExampleService {
 
   async remove(id: string): Promise<void> {
     await this.exampleRepository.delete(id);
+  }
+
+  async findAllSummaries(): Promise<ExampleSummaryDto[]> {
+    return this.exampleRepository.find({
+      select: ['name', 'count', 'isActive'],
+    });
   }
 }
